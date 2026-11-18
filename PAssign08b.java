@@ -49,16 +49,16 @@ public class PAssign08b extends Application {
 		VBox vb = new VBox();
 		vb.getChildren().addAll(title, gamePane, gp);
 		vb.setAlignment(Pos.CENTER);
-		// vb.setMargin(hb,  new Insets(0, 10, 0, 10));
-		// vb.setPadding(new Insets(0, 0, 10, 0));
 		
 		BorderPane bp = new BorderPane();
 		bp.setCenter(vb);
+		
 		// Create a scene and place it in the stage
 		Scene scene = new Scene(bp, 750, 1000);
-		primaryStage.setTitle("MPG Calculator"); // Set title
-		primaryStage.setScene(scene); // Place the scene in the stage
-		primaryStage.show(); // Display the stage
+		primaryStage.setTitle("Tic Tac Toe");
+		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
+		primaryStage.show();
 	}
 	
 	public static void main(String[] args) {
@@ -100,12 +100,10 @@ class TicTacToePane extends GridPane {
 	}
 	
 	private void onPress(Button btn) {
-		// System.out.println(turn);
 		if (gameOver)
 			return;
 		
 		if (turn >= 9) {
-			endGame();
 			return;
 		}
 		
@@ -118,10 +116,11 @@ class TicTacToePane extends GridPane {
 			else {
 				btn.setText("O");
 			}
+			
+			turn++;
+			checkScore();
 		}
 		
-		turn++;
-		checkScore();
 	}
 	
 	public void reset() {
@@ -133,7 +132,8 @@ class TicTacToePane extends GridPane {
 		gameOver = false;
 	}
 	
-	private void endGame() {
+	private void endGame(String winner) {
+		score.set(String.format("Winner: %s", winner));
 		gameOver = true;
 	}
 	
@@ -147,17 +147,13 @@ class TicTacToePane extends GridPane {
 				inputs += btns.get(offset + j).getText();
 			}
 			
-			System.out.println(inputs);
-			
 			if (inputs.equals("XXX")) {
-				score.set("Winner: X");
-				endGame();
-				break;
+				endGame("X");
+				return;
 			}
 			else if (inputs.equals("OOO")) {
-				score.set("Winner: O");
-				endGame();
-				break;
+				endGame("O");
+				return;
 			}
 			
 			offset += 3;
@@ -171,17 +167,13 @@ class TicTacToePane extends GridPane {
 				inputs += btns.get(offset + (j * 3)).getText();
 			}
 			
-			System.out.println(inputs);
-			
-			if (inputs.equals("XXX")) {
-				score.set("Winner: X");
-				endGame();
-				break;
+			if (inputs.equals("XXX")) {;
+				endGame("X");
+				return;
 			}
 			else if (inputs.equals("OOO")) {
-				score.set("Winner: O");
-				endGame();
-				break;
+				endGame("O");
+				return;
 			}
 			
 			offset++;
@@ -194,30 +186,31 @@ class TicTacToePane extends GridPane {
 		}
 		
 		if (down.equals("XXX")) {
-			score.set("Winner: X");
-			endGame();
+			endGame("X");
+			return;
 		}
 		else if (down.equals("OOO")) {
-			score.set("Winner: O");
-			endGame();
+			endGame("O");
+			return;
 		}
 		
+		// up diagonal
 		String up = "";
 		for (int i = 0; i < 3; i++) {
-			up += btns.get(i * 2).getText();
+			up += btns.get((i + 1) * 2).getText();
 		}
 		
 		if (up.equals("XXX")) {
-			score.set("Winner: X");
-			endGame();
+			endGame("X");
+			return;
 		}
 		else if (up.equals("OOO")) {
-			score.set("Winner: O");
-			endGame();
+			endGame("O");
+			return;
 		}
-	
-		
-		System.out.println("Score: " + score);
+
+		if (turn >= 9) 
+			endGame("None");
 	}
 	
 	public StringProperty getScore() {
