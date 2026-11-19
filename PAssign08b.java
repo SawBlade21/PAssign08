@@ -1,3 +1,12 @@
+/*
+* File: PAssign08b.java
+* Class: CSCI 1302
+* Authors: James Rogers, Jeremiah Calvert
+* Created on: November 13, 2026
+* Last Modified: November 19, 2026
+* Description: A game of Tic Tac Toe using JavaFX
+*/
+
 package passign08b;
 
 import java.util.ArrayList;
@@ -53,7 +62,6 @@ public class PAssign08b extends Application {
 		BorderPane bp = new BorderPane();
 		bp.setCenter(vb);
 		
-		// Create a scene and place it in the stage
 		Scene scene = new Scene(bp, 750, 1000);
 		primaryStage.setTitle("Tic Tac Toe");
 		primaryStage.setScene(scene);
@@ -90,7 +98,6 @@ class TicTacToePane extends GridPane {
 				Button btn = new Button();
 				btn.setPrefSize(200, 200);
 				btn.setStyle("-fx-font-size: 80px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: black; -fx-border-width: 2");
-				
 				btn.setOnAction((e) -> onPress(btn));
 				
 				btns.add(btn);
@@ -100,26 +107,20 @@ class TicTacToePane extends GridPane {
 	}
 	
 	private void onPress(Button btn) {
-		if (gameOver)
+		if (gameOver || turn >= 9 || btn.getText() != "")
 			return;
-		
-		if (turn >= 9) {
-			return;
-		}
 		
 		int index = btns.indexOf(btn);
 		
-		if (btn.getText() == "") {
-			if (turn % 2 == 0) {
-				btn.setText("X");
-			}
-			else {
-				btn.setText("O");
-			}
-			
-			turn++;
-			checkScore();
+		if (turn % 2 == 0) {
+			btn.setText("X");
 		}
+		else {
+			btn.setText("O");
+		}
+		
+		turn++;
+		checkScore();
 		
 	}
 	
@@ -127,6 +128,7 @@ class TicTacToePane extends GridPane {
 		for (Button btn : btns) {
 			btn.setText("");
 		}
+		
 		turn = 0;
 		score.set("Winner: ");
 		gameOver = false;
